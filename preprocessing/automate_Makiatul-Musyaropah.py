@@ -35,18 +35,23 @@ def process_data(input_path: str, output_path: str):
     X = df.drop(columns=['target'])
     y = df['target']
 
+    # Split stratified supaya distribusi target seimbang di train dan test
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, stratify=y, random_state=42
     )
 
     print(f"Train size: {X_train.shape[0]} | Test size: {X_test.shape[0]}")
 
+    # Tambahkan kolom 'split' untuk menandai train/test
     df_clean = df.copy()
     df_clean['split'] = None
     df_clean.loc[X_train.index, 'split'] = 'train'
     df_clean.loc[X_test.index, 'split'] = 'test'
 
+    # Pastikan folder output ada
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    # Simpan hasil preprocess ke CSV
     df_clean.to_csv(output_path, index=False)
     print(f"Data hasil preprocessing disimpan di: {output_path}")
 
@@ -55,6 +60,7 @@ def process_data(input_path: str, output_path: str):
 
 if __name__ == "__main__":
     base_dir = os.path.dirname(__file__)
-    input_file = os.path.join(base_dir, '..', 'heart_raw', 'heart_raw.csv')
-    output_file = os.path.join(base_dir, 'heart_preprocessing', 'heart_cleaned_split.csv')
+    input_file = os.path.join(base_dir, '..', 'heart_raw', 'heart_raw.csv')  # Pastikan ini benar, sesuaikan nama file & folder
+    output_file = os.path.join(base_dir, 'heart_preprocessing', 'heart_cleaned_split.csv')  # Sesuaikan dengan workflow
+
     process_data(input_file, output_file)

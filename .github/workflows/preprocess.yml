@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # supaya bisa push dan commit di branch
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -31,7 +33,6 @@ jobs:
           name: preprocessed-dataset
           path: preprocessing/heart_preprocessing/heart_cleaned_split.csv
 
-
       - name: Configure Git
         run: |
           git config --global user.name 'makiatulmsyr17'
@@ -39,6 +40,8 @@ jobs:
 
       - name: Commit and push preprocessed data
         run: |
-          git add preprocessing/heart_cleaned_split.csv
-          git commit -m "Auto update preprocessed dataset [skip ci]" || echo "No changes to commit"
-          git push https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD:main
+          git add preprocessing/heart_preprocessing/heart_cleaned_split.csv
+          git diff --staged --quiet || (
+            git commit -m "Auto update preprocessed dataset [skip ci]" &&
+            git push https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD:main
+          )
