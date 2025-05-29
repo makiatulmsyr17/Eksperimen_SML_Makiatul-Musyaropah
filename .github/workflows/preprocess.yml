@@ -26,7 +26,7 @@ jobs:
         run: python preprocessing/automate_Makiatul-Musyaropah.py
 
       - name: Upload preprocessed dataset
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@3c86c8506f1d0195c3e7a4011f80594bbebd5d2a
         with:
           name: preprocessed-dataset
           path: preprocessing/heart_preprocessing/heart_cleaned_split.csv
