@@ -26,7 +26,19 @@ jobs:
         run: python preprocessing/automate_Makiatul-Musyaropah.py
 
       - name: Upload preprocessed dataset
-        uses: actions/upload-artifact@v2  # ganti v3 ke v2 agar stabil
+        uses: actions/upload-artifact@v2
         with:
           name: preprocessed-dataset
-          path: preprocessing/heart_cleaned_split.csv
+          path: preprocessing/heart_preprocessing/heart_cleaned_split.csv
+
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'makiatulmsyr17'
+          git config --global user.email 'makiatulmusyaropah@gmail.com'
+
+      - name: Commit and push preprocessed data
+        run: |
+          git add preprocessing/heart_cleaned_split.csv
+          git commit -m "Auto update preprocessed dataset [skip ci]" || echo "No changes to commit"
+          git push https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD:main
