@@ -9,7 +9,7 @@ lifelines==0.30.0
 matplotlib==3.10.3
 nibabel==5.3.2
 nltk==3.9.1
-numpy==2.2.6
+numpy
 opencv_contrib_python==4.11.0.86
 opencv_python==4.11.0.86
 opencv_python_headless==4.11.0.86
