@@ -9,12 +9,16 @@ on:
 jobs:
   preprocess:
     runs-on: ubuntu-latest
+    
+    # Menambahkan izin agar workflow bisa menulis ke repositori
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # supaya bisa push dan commit di branch
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -35,13 +39,14 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.name 'makiatulmsyr17'
-          git config --global user.email 'makiatulmusyaropah@gmail.com'
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Commit and push preprocessed data
         run: |
           git add preprocessing/heart_preprocessing/heart_cleaned_split.csv
+          # Hanya commit & push jika ada perubahan pada file
           git diff --staged --quiet || (
             git commit -m "Auto update preprocessed dataset [skip ci]" &&
-            git push https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD:main
+            git push
           )
